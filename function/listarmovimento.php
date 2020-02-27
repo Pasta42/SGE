@@ -1,9 +1,9 @@
 <?php
-include_once "../class/movimentos.class.php";
+	include_once("../class/movimentos.class.php");
 
 	$obj = new Movimentos;
-	if(isset($_GET['Buscar']))
-		$retorno = $obj->listar('where id="'.$_GET['Buscar'].'" or nome like "'.$_GET['Buscar'].'"');
+	if(isset($_GET['buscar']))
+		$retorno = $obj->listar('where id="'.$_GET['buscar'].'" or nome like "'.$_GET['buscar'].'"');
 	else
 		$retorno = $obj->listar();
 		if($retorno ==''){

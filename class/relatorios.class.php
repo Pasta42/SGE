@@ -1,158 +1,110 @@
 <?php
-    class relatorios{
-        private $id;
-        private $entrada;
-        private $saida;
+    class Relatorio{
+        public $id;
+        public $entrada;
+        public $saida;
 
-            public function __get($key){
-                return $this->$key;
-            }
-            public function __set($key, $value){
-                $this->$key=$value;
-            }
+        public function conectar(){
+            date_default_timezone_set('America/Sao_Paulo');
+            $connection = new PDO('mysql:host=localhost; dbname=pasta42_sige', 'pasta42_42', 'SiGE$42pasta');
+            //$connection = new PDO('mysql:host=localhost; dbname=bancosge', 'root', '');
+            return $connection;
+        }
 
-            public function conectar(){
-                date_default_timezone_set('America/Sao Paulo');
-                //$connection = new PDO('mysql:host=localhost; dbname=""', 'root', '');
-                $connection = new PDO('mysql:host=localhost; dbname=bancosge', 'root', '');
-                return $connection;
-            }
-
-            public function Adicionar() {
-                $connection;
-                try{
-                    $connection = Relatorios::conectar();
-                    $connection->beginTransaction();
-                    $sql = "INSERT INTO relatorios (entrada, saida) VALUES (:entrada, :saida)";
-                    $preparedStatment = $connection->prepare($sql);
-                    $preparedStatment->bindParam(":entrada", $this->entrada);
-                    $preparedStatment->bindParam(":saida", $this->saida);
-                    $executionResult = $preparedStatment->execute();
-                    $connection->commit();
-
-                    if($executionResult == TRUE) {
-                        return TRUE;
-                    }
-                    throw new PDOException();
-                }
-                catch (PDOException $exc){
-                    if((isset($connection)) && ($connection->inTransaction())) {
-                        $connection->rollBack();
-                    }
-                    PRINT($exc->getMessage());
-                    return FALSE;
-                }
-                finally {
-                    if (isset($connection)) {
-                        unset($connection);
-                    }
-                }
-
-            }
-            public function Listar() {
-                $connection;
-                try {
-                    $connection = Relatorios::conectar();
-                    $connection->beginTransaction();
-                    $sql = "SELECT * FROM relatorios";
-                    $preparedStatment = $connection->prepare($sql);
-                    $preparedStatment->execute();
-                    $executeResult = $preparedStatment->fetchAll(PDO::FETCH_OBJ);
-                    $connection->commit();
-                    if ($executionResult == TRUE) {
-                        return $executeResult;
-                    }
-                    throw new PDOException();
-                }
-                catch (PDOException $exc) {
-                    if ((isset($connection)) && ($connection->inTransaction())){
-                        $connection->rollBack();
-                    }
-                    PRINT($exc->getMessage());
-                    return FALSE;
-                }
-                finally {
-                    if(isset($connection)) {
-                        unset($connection);
-                    }
-                }
-            }
-
-            public function Editar(){
-                $connection;
-                try{
-                    $connection = Relatorios::conectar();
-                    $connection->beginTransaction();
-                    $sql = "UPDATE relatorios SET entrada = :entrada, saida = :saida WHERE id = :id";
-                    $preparedStatment = $connection->prepare($sql);
-                    $preparedStatment->bindParam(":id", $this->id);
-                    $preparedStatment->bindParam(":entrada", $this->entrada);
-                    $preparedStatment->bindParam(":saida", $this->saida);
-                    $executionResult = $preparedStatment->execute();
-                    $connection->commit(); 
-                }
-                catch (PDOException $exc) {
-                    if ((isset($connection)) && ($connection->inTransaction())) {
-                        $connection->rollBack();
-                    }
-                    PRINT $exc->getMessage();
-                }
-                finally {
-                    if (isset($connection)) {
-                        unset($connection);
-                    }
-                }
-            }
-
-            public function Excluir($id){
-                $connection;
-                try{
-                    $connection = Relatórios::conectar();
-                    $connection->beginTransaction();
-                $sql = "DELETE FROM relatorios WHERE id = :id";
-                $preparedStatment->bindParam(":id", $this->id);
-                }
-                catch (PDOException $exc) {
-                    if ((isset($connection)) && ($connection->inTransaction())){
-                        $connection->rollBack();
-                    }
-                    PRINT $exc->getMessage();
-                }
-                finally {
-                    if (isset($connection)){
-                        unset($connection);
-                    }
-                }
-            }
-
-            public function retornarunico($id){
-                $connection;
-                try{
-                    $connection = Relatorios::conectar();
-                    $connection->beginTransaction();
-                $sql = "SELECT * FROM relatorios WHERE id = {$id}";
+        static public function totalProdutos(){
+            $connection;
+            try{
+                $connection = Relatorio::conectar();
+                $connection->beginTransaction();
+                $sql = "SELECT * FROM produtos";
                 $preparedStatment = $connection->prepare($sql);
                 $preparedStatment->execute();
-                $executionResult = $preparedStatment->fetch(PDO::FETCH_ASSOC);
+                $executionResult = $preparedStatment->rowCount();
                 $connection->commit();
-                if ($executionResult == TRUE) {
-                    return $executionResult;
+                if ($executionResult == TRUE){
+                    if($executionResult != "" AND $executionResult > 0){
+                        return $executionResult; 
+                    }else{
+                        return 0;
+                    }
                 }
                 throw new PDOException();
+            }
+            catch (PDOException $exc) {
+                if ((isset($connection)) && ($connection->inTransaction())) {
+                    $connection->rollBack();
                 }
-                catch (PDOException $exc) {
-                    if ((isset($connection)) && ($connection->inTransaction())) {
-                        $connection->rollBack();
-                    }
-                    PRINT($exc->getMessage());
-                    return FALSE;
-                }
-                finally {
-                    if (isset($connection)) {
-                        unset($connection);
-                    }
+                PRINT($exc->getMessage());
+                return FALSE;
+            }
+            finally {
+                if (isset($connection)) {
+                    unset($connection);
                 }
             }
+        }
+
+        static public function totalFornecedores(){
+            $connection;
+            try{
+                $connection = Relatorio::conectar();
+                $connection->beginTransaction();
+                $sql = "SELECT * FROM fornecedor";
+                $preparedStatment = $connection->prepare($sql);
+                $preparedStatment->execute();
+                $executionResult = $preparedStatment->rowCount();
+                $connection->commit();
+                if ($executionResult == TRUE){
+                    if($executionResult != "" AND $executionResult > 0){
+                        return $executionResult; 
+                    }else{
+                        return 0;
+                    }
+                }
+                throw new PDOException();
+            }
+            catch (PDOException $exc) {
+                if ((isset($connection)) && ($connection->inTransaction())) {
+                    $connection->rollBack();
+                }
+                PRINT($exc->getMessage());
+                return FALSE;
+            }
+            finally {
+                if (isset($connection)) {
+                    unset($connection);
+                }
+            }
+        }
+
+        static public function totalValores($movimento){
+			try{
+				$connection = Relatorio::conectar();
+				$connection->beginTransaction();
+				$sql = "SELECT valcusto, valvenda FROM movimento WHERE {$movimento}";
+				$preparedStatment = $connection->prepare($sql);
+				$preparedStatment->execute();
+				$executionResult = $preparedStatment->fetchAll(PDO::FETCH_OBJ);
+				$connection->commit();
+				if ($executionResult == TRUE){
+					return $executionResult; 
+				}
+				throw new PDOException();
+			}
+			catch (PDOException $exc) {
+				 if ((isset($connection)) && ($connection->inTransaction())) {
+					  $connection->rollBack();
+				 }
+				 PRINT($exc->getMessage());
+				 return FALSE;
+			}
+			finally {
+				 if (isset($connection)) {
+					  unset($connection);
+				 }
+			}
+	  }
+
     }
 
 ?>

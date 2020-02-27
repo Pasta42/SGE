@@ -1,5 +1,4 @@
 <?php
-include_once "../views/cabecalho.php";
 include_once "../class/movimentos.class.php";
 
     if(isset($_POST['login']) && $_POST['permissao']!=''){
@@ -30,5 +29,4 @@ include_once "../class/movimentos.class.php";
 
         }
 
-include_once "../views/rodape.php";
 ?>

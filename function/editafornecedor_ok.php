@@ -1,6 +1,5 @@
 <?php
-    include_once "../views/cabecalho.php";
-    include_once "../class/fornecedores.class.php";
+    include_once("../class/fornecedores.class.php");
 
     if(isset($_POST['nome']) && $_POST['nome']!=''){
             $obj = new Fornecedor();
@@ -11,23 +10,12 @@
             $obj->email = strip_tags($_POST['email']);
             $resultado = $obj->Editar();
             if($resultado != ""){
-                echo "<div style='text-align:center;' class='alert alert-success'> 
-                <strong>Fornecedor editado com sucesso!</strong>
-                </div>";
-                header("Refresh:3; url=../views/listarfornecedor.php");}
-            else{
-                echo "<div style='text-align:center;' class='alert alert-danger'>
-                <strong>Usuário não pode ser editado!</strong>
-                </div>";
-                header("Refresh:3; url=../views/editafornecedor.php?id={$obj->id}");}
-        }	
-        else{
-            echo  "<div style='text-align:center;' class='alert alert-danger'>
-                <strong>Algo errado aconteceu, tente novamente!</strong>
-                </div>";
-                header("Refresh:2; url=logout.php");
-
+                header("Location:../views/listarfornecedor.php?msg=1");
+            }else{
+                header("Location:../views/listarfornecedor.php?msg=2");
+            }
+        }else{
+            header("Location: logout.php");
         }
 
-    include_once "../views/rodape.php";
 ?>

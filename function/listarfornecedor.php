@@ -1,9 +1,9 @@
 <?php
-include_once "../class/fornecedores.class.php";
+	include_once("../class/fornecedores.class.php");
 
 	$obj = new Fornecedor;
-	if(isset($_GET['Buscar']))
-		$retorno = $obj->Listar('where id="'.$_GET['Buscar'].'" or nome like "'.$_GET['Buscar'].'"');
+	if(isset($_GET['buscar']))
+		$retorno = $obj->Listar('where id="'.$_GET['buscar'].'" or nome like "'.$_GET['buscar'].'"');
 	else
 		$retorno = $obj->Listar();
 		if($retorno ==''){
@@ -20,8 +20,8 @@ include_once "../class/fornecedores.class.php";
 						<td>$linha->cnpj</td>
                         <td>$linha->telefone</td>
                         <td>$linha->email</td>
-						<td><a href='editafornecedor.php?id=$linha->id' class='btn btn-warning'>Editar</a></td>
-						<td><a href='excluirfornecedor.php?id=$linha->id' class='btn btn-warning'>Apagar</a></td>
+						<td><a href='editafornecedor.php?id=$linha->id' class='btn btn-warning' alt='Editar' title='Editar'><i class='fas fa-edit'></i></a></td>
+						<td><a href='excluirfornecedor.php?id=$linha->id' class='btn btn-warning' alt='Excluir' title='Excluir'><i class='fas fa-trash'></i></a></td>
 					</tr>";
 			}
 		}

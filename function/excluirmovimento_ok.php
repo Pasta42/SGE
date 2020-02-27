@@ -1,5 +1,4 @@
 <?php
-include_once "../views/cabecalho.php";
 include_once "../class/movimentos.class.php";
 
 $obj = new Movimentos();
@@ -19,5 +18,4 @@ $obj = new Movimentos();
         header("Refresh:3; url=../views/excluirmovimento.php?id={$obj->id}");
     }
         
-include_once "../views/rodape.php";
 ?>

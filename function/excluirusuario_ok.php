@@ -1,23 +1,19 @@
 <?php
-include_once "../views/cabecalho.php";
-include_once "../class/usuarios.class.php";
+    include_once("../class/usuarios.class.php");
 
-$obj = new Usuarios();
-	$obj->id = $_GET['id'];
-    $resultado = $obj->Excluir($obj->id);
-    var_dump($resultado);
-	if($resultado > 0){
-        echo "<div style='text-align:center;' class='alert alert-success'> 
-        <strong>Excluído com sucesso!</strong>
-        </div>";
-        header("Refresh:3; url=../views/listarusuario.php");
+    
+    if(isset($_GET['id']) AND $_GET['id'] != ""){
+        $obj = new Usuarios();
+        $obj->id = $_GET['id'];
+        $resultado = $obj->Excluir($obj->id);
+        if($resultado > 0){
+            header("Location:../views/listarusuario.php?msg=3");
+        }else{
+            header("Location:../views/listarusuario.php?msg=2");
+        }
+    }else{
+        header("Location: logout.php");
     }
-    else{
-        echo "<div style='text-align:center;' class='alert alert-danger'>
-        <strong>Usuário não pode ser excluído!</strong>
-        </div>";
-        header("Refresh:3; url=../views/excluirusuario.php?id={$obj->id}");
-    }
-        
-include_once "../views/rodape.php";
+
+
 ?>
